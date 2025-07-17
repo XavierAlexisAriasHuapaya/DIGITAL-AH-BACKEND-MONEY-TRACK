@@ -1,0 +1,18 @@
+package arias.huapaya.digital.peru.money.track.interfaces;
+
+import arias.huapaya.digital.peru.money.track.presentation.dto.user.UserCreateDTO;
+import arias.huapaya.digital.peru.money.track.presentation.dto.user.UserFindOneDTO;
+import arias.huapaya.digital.peru.money.track.presentation.dto.user.UserUpdateDTO;
+import arias.huapaya.digital.peru.money.track.presentation.dto.user.UserUpdatePasswordDTO;
+
+public interface UserImpl {
+
+    String create(UserCreateDTO user);
+
+    String update(UserUpdateDTO user);
+
+    UserFindOneDTO findOne(Long id);
+
+    String updatePassword(UserUpdatePasswordDTO user);
+
+}

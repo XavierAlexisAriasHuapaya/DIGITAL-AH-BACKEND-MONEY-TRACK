@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: app-money-track
+  datasource:
+    url: jdbc:postgresql://localhost:5433/db-money-track
+    username: postgres
+    password: 123
+  jpa:
+    hibernate:
+      ddl-auto: create
+
+server:
+  servlet:
+    context-path: /api/money-track
+  port: 8080
