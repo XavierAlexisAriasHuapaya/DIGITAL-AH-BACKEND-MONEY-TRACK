@@ -13,4 +13,10 @@ public class TransactionBalanceDTO {
 
     private Double balance;
 
+    private Double inbound_to_month;
+
+    private Double outbound_to_month;
+
+    private Double balance_to_month;
+
 }

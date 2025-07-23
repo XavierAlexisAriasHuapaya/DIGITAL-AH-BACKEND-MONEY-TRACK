@@ -10,14 +10,18 @@ import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.Trans
 
 public interface TransactionRepository extends JpaRepository<TransactionEntity, Long> {
 
-    Page<TransactionEntity> findByUserIdAndDescriptionContainingIgnoreCase(Long userId, String search,
-            Pageable pageable);
+        Page<TransactionEntity> findByUserIdAndDescriptionContainingIgnoreCase(Long userId, String search,
+                        Pageable pageable);
 
     @Query(value = "SELECT " +
             "COALESCE(SUM(CASE WHEN c.type = 'INBOUND' THEN t.amount END), 0) AS inbound, " +
             "COALESCE(SUM(CASE WHEN c.type = 'OUTBOUND' THEN t.amount END), 0) AS outbound, " +
             "(COALESCE(SUM(CASE WHEN c.type = 'INBOUND' THEN t.amount END), 0) " +
-            "- COALESCE(SUM(CASE WHEN c.type = 'OUTBOUND' THEN t.amount END), 0)) AS balance " +
+            "- COALESCE(SUM(CASE WHEN c.type = 'OUTBOUND' THEN t.amount END), 0)) AS balance, " +
+            "COALESCE(SUM(CASE when c.type = 'INBOUND' AND t.date >= date_trunc('month', current_date) THEN t.amount END), 0) as inbound_to_month, " +
+            "COALESCE(SUM(CASE when c.type = 'OUTBOUND' AND t.date >= date_trunc('month', current_date) THEN t.amount END), 0) as outbound_to_month, " +
+            "(COALESCE(SUM(CASE when c.type = 'INBOUND' AND t.date >= date_trunc('month', current_date) THEN t.amount END), 0) " +
+            "- COALESCE(SUM(CASE when c.type = 'OUTBOUND' AND t.date >= date_trunc('month', current_date) THEN t.amount END), 0)) balance_to_month " +
             "FROM transactions t " +
             "INNER JOIN categories c ON c.id = t.category_id  " +
             "WHERE t.user_id = 1 " +
