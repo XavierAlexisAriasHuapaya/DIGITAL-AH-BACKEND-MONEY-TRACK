@@ -44,7 +44,7 @@ public class TransactionController {
     }
 
     @GetMapping("balance/{userId}")
-    public ResponseEntity<?> getMethodName(@PathVariable Long userId) {
+    public ResponseEntity<?> getBalanceByUserId(@PathVariable Long userId) {
         TransactionBalanceDTO transactionBalance = this.transactionService.getBalanceByUserId(userId);
         return new ResponseEntity<>(transactionBalance, HttpStatus.OK);
     }
