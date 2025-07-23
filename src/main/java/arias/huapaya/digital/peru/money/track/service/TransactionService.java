@@ -6,10 +6,12 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import arias.huapaya.digital.peru.money.track.interfaces.TransactionImpl;
 import arias.huapaya.digital.peru.money.track.persistence.entity.TransactionEntity;
 import arias.huapaya.digital.peru.money.track.persistence.repository.TransactionRepository;
+import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.TransactionBalanceDTO;
 import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.TransactionCreateDTO;
 import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.TransactionFindAllDTO;
 import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.TransactionPaginationDTO;
@@ -68,5 +70,11 @@ public class TransactionService implements TransactionImpl {
                 .toList();
         return new PageDTO<>(transactionPagination, transactionPage.getNumber(), transactionPage.getSize(),
                 transactionPage.getTotalElements());
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public TransactionBalanceDTO getBalanceByUserId(Long userId) {
+        return this.respository.getBalanceByUserId(userId);
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.TransactionBalanceDTO;
 import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.TransactionCreateDTO;
 import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.TransactionPaginationDTO;
 import arias.huapaya.digital.peru.money.track.service.TransactionService;
@@ -41,5 +42,12 @@ public class TransactionController {
         transactionPage = this.transactionService.pagination(userId, search, pageable);
         return new ResponseEntity<>(transactionPage, HttpStatus.OK);
     }
+
+    @GetMapping("balance/{userId}")
+    public ResponseEntity<?> getMethodName(@PathVariable Long userId) {
+        TransactionBalanceDTO transactionBalance = this.transactionService.getBalanceByUserId(userId);
+        return new ResponseEntity<>(transactionBalance, HttpStatus.OK);
+    }
+    
 
 }
