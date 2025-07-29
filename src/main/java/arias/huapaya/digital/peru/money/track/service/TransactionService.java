@@ -38,7 +38,7 @@ public class TransactionService implements TransactionImpl {
                 .date(transaction.getDate())
                 .build();
         respository.save(transactionEntity);
-        return "Transaction created successfully";
+        return "Successfully created";
     }
 
     @Override
