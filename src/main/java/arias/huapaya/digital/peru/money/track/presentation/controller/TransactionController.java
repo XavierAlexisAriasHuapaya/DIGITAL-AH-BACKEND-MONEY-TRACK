@@ -1,6 +1,7 @@
 package arias.huapaya.digital.peru.money.track.presentation.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.TransactionBalanceDTO;
+import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.TransactionBarDTO;
+import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.TransactionBarIncomeExpenseDTO;
 import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.TransactionCreateDTO;
 import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.TransactionPaginationDTO;
 import arias.huapaya.digital.peru.money.track.service.TransactionService;
@@ -48,6 +51,17 @@ public class TransactionController {
         TransactionBalanceDTO transactionBalance = this.transactionService.getBalanceByUserId(userId);
         return new ResponseEntity<>(transactionBalance, HttpStatus.OK);
     }
-    
+
+    @GetMapping("dashboard/bar/{userId}")
+    public ResponseEntity<?> getTransactionBarByUserId(@PathVariable Long userId) {
+        List<TransactionBarDTO>  transactionBarList = this.transactionService.getTransactionBarByUserId(userId);
+        return new ResponseEntity<>(transactionBarList, HttpStatus.OK);
+    }
+
+    @GetMapping("dashboard/bar/{userId}/type/{type}")
+    public ResponseEntity<?> getTransactionBarIncomeExpenseByUserIdAndType(@PathVariable Long userId, @PathVariable String type) {
+        List<TransactionBarIncomeExpenseDTO>  transactionBarList = this.transactionService.getTransactionBarIncomeExpenseByUserIdAndType(userId, type);
+        return new ResponseEntity<>(transactionBarList, HttpStatus.OK);
+    }
 
 }

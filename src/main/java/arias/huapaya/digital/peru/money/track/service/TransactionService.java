@@ -12,6 +12,8 @@ import arias.huapaya.digital.peru.money.track.interfaces.TransactionImpl;
 import arias.huapaya.digital.peru.money.track.persistence.entity.TransactionEntity;
 import arias.huapaya.digital.peru.money.track.persistence.repository.TransactionRepository;
 import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.TransactionBalanceDTO;
+import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.TransactionBarDTO;
+import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.TransactionBarIncomeExpenseDTO;
 import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.TransactionCreateDTO;
 import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.TransactionFindAllDTO;
 import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.TransactionPaginationDTO;
@@ -76,5 +78,17 @@ public class TransactionService implements TransactionImpl {
     @Override
     public TransactionBalanceDTO getBalanceByUserId(Long userId) {
         return this.respository.getBalanceByUserId(userId);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<TransactionBarDTO>  getTransactionBarByUserId(Long userId) {
+        return this.respository.getTransactionBarByUserId(userId);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<TransactionBarIncomeExpenseDTO> getTransactionBarIncomeExpenseByUserIdAndType(Long userId, String type) {
+        return this.respository.getTransactionBarIncomeExpenseByUserIdAndType(userId, type);
     }
 }
