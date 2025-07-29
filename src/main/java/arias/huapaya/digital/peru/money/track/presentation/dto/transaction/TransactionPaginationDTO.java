@@ -1,6 +1,7 @@
 package arias.huapaya.digital.peru.money.track.presentation.dto.transaction;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import arias.huapaya.digital.peru.money.track.persistence.entity.BankAccountEntity;
 import arias.huapaya.digital.peru.money.track.persistence.entity.CategoryEntity;
@@ -30,6 +31,8 @@ public class TransactionPaginationDTO {
 
     private LocalDate date;
 
+    private LocalDateTime createdAt;
+
     private Boolean enabled;
 
     public TransactionPaginationDTO(TransactionEntity transaction) {
@@ -40,6 +43,7 @@ public class TransactionPaginationDTO {
         this.description = transaction.getDescription();
         this.amount = transaction.getAmount();
         this.date = transaction.getDate();
+        this.createdAt = transaction.getCreatedAt();
         this.enabled = transaction.getEnabled();
     }
 
