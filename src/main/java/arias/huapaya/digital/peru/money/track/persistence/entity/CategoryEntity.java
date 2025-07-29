@@ -15,8 +15,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PostPersist;
 import jakarta.persistence.PostUpdate;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -52,8 +52,8 @@ public class CategoryEntity {
 
     private Boolean enabled;
 
-    @PostPersist
-    public void postPersist() {
+    @PrePersist
+    public void prePersist() {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
         this.enabled = true;
