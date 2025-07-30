@@ -82,13 +82,14 @@ public class UserService implements UserImpl {
 
         }
         UserEntity userEntity = userOpt.get();
-        if (!userEntity.getPassword().equals(user.getPassword())) {
+
+        if (!this.passwordEncoder.matches(user.getPassword(), userEntity.getPassword())) {
             return "Password is incorrect";
         }
         if (!user.getNewPassword().equals(user.getConfirmPassword())) {
             return "New password and confirm password do not match";
         }
-        userEntity.setPassword(user.getNewPassword());
+        userEntity.setPassword(this.passwordEncoder.encode(user.getNewPassword()));
         userRepository.save(userEntity);
         return "Successfully updated password";
     }
