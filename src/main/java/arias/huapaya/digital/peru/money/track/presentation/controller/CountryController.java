@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -21,12 +22,14 @@ public class CountryController {
 
     private final CountryService countryService;
 
+    @PreAuthorize("permitAll()")
     @GetMapping
     public ResponseEntity<?> getAll() {
         List<CountryEntity> countries = this.countryService.findAll();
         return new ResponseEntity<>(countries, HttpStatus.OK);
     }
 
+    @PreAuthorize("permitAll()")
     @GetMapping(path = "{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
         CountryEntity country = this.countryService.findById(id);

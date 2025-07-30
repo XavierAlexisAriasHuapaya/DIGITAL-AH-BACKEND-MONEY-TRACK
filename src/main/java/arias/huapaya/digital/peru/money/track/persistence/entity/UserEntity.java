@@ -1,6 +1,13 @@
 package arias.huapaya.digital.peru.money.track.persistence.entity;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,7 +31,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserEntity {
+public class UserEntity implements UserDetails {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -37,12 +44,16 @@ public class UserEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "countryId", nullable = true)
     private CountryEntity country;
-    
+
     private String email;
 
     private String username;
 
     private String password;
+
+    @JoinColumn(name = "rolId")
+    @ManyToOne
+    private RolEntity rol;
 
     @Column(updatable = false)
     private LocalDateTime createdAt;
@@ -61,6 +72,24 @@ public class UserEntity {
     @PostUpdate
     public void postUpdate() {
         this.updatedAt = LocalDateTime.now();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (this.rol == null) {
+            return null;
+        }
+
+        if (this.rol.getPermissions() == null) {
+            return null;
+        }
+
+        List<GrantedAuthority> authorities = this.getRol().getPermissions().stream()
+                .map(rol -> rol.getOperations().getName())
+                .map(rol -> new SimpleGrantedAuthority(rol))
+                .collect(Collectors.toList());
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + this.rol.getDescription()));
+        return authorities;
     }
 
 }

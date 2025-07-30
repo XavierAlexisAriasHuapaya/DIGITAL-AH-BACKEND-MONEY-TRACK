@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +33,7 @@ public class BankAccountController {
 
     private final BankAccountService bankAccountService;
 
+    @PreAuthorize("hasAuthority('BANK_ACCOUNT_CREATE')")
     @PostMapping
     public ResponseEntity<?> create(@RequestBody BankAccountCreateDTO bankAccount) {
         Map<String, Object> response = new HashMap<>();
@@ -39,6 +41,7 @@ public class BankAccountController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAuthority('BANK_ACCOUNT_UPDATE')")
     @PatchMapping
     public ResponseEntity<?> update(@RequestBody BankAccountUpdateDTO bankAccount) {
         Map<String, Object> response = new HashMap<>();
@@ -46,20 +49,23 @@ public class BankAccountController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAuthority('BANK_ACCOUNT_FIND_ALL')")
     @GetMapping(path = "user/{userId}")
     public ResponseEntity<?> findAll(@PathVariable Long userId) {
         List<BankAccountFindAllDTO> bankAccounts = this.bankAccountService.findAll(userId);
         return new ResponseEntity<>(bankAccounts, HttpStatus.OK);
     }
 
-    @GetMapping(path = "pagination/{id}")
-    public ResponseEntity<?> pagination(@PathVariable Long id, @RequestParam(required = false) String search,
+    @PreAuthorize("hasAuthority('BANK_ACCOUNT_PAGINATION')")
+    @GetMapping(path = "pagination/{userId}")
+    public ResponseEntity<?> pagination(@PathVariable Long userId, @RequestParam(required = false) String search,
             Pageable pageable) {
         PageDTO<BankAccountPaginationDTO> bankAccountPage = null;
-        bankAccountPage = this.bankAccountService.pagination(id, search, pageable);
+        bankAccountPage = this.bankAccountService.pagination(userId, search, pageable);
         return new ResponseEntity<>(bankAccountPage, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('BANK_ACCOUNT_FIND_ONE')")
     @GetMapping(path = "{id}")
     public ResponseEntity<?> findOne(@PathVariable Long id) {
         BankAccountFindOne bankAccount = this.bankAccountService.findOne(id);

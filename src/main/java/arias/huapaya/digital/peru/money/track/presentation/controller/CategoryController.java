@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +33,7 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
+    @PreAuthorize("hasAuthority('CATEGORY_CREATE')")
     @PostMapping
     public ResponseEntity<?> create(@RequestBody CategoryCreateDTO category) {
         Map<String, Object> response = new HashMap<>();
@@ -39,6 +41,7 @@ public class CategoryController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAuthority('CATEGORY_UPDATE')")
     @PatchMapping
     public ResponseEntity<?> update(@RequestBody CategoryUpdateDTO category) {
         Map<String, Object> response = new HashMap<>();
@@ -46,23 +49,26 @@ public class CategoryController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAuthority('CATEGORY_FIND_ALL')")
     @GetMapping(path = "user/{id}")
     public ResponseEntity<?> findAll(@PathVariable Long id) {
         List<CategoryFindAllDTO> categories = this.categoryService.findAll(id);
         return new ResponseEntity<>(categories, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('CATEGORY_FIND_ONE')")
     @GetMapping(path = "{id}")
     public ResponseEntity<?> findOne(@PathVariable Long id) {
         CategoryFindOneDTO category = this.categoryService.findOne(id);
         return new ResponseEntity<>(category, HttpStatus.OK);
     }
 
-    @GetMapping(path = "pagination/{id}")
-    public ResponseEntity<?> pagination(@PathVariable Long id, @RequestParam(required = false) String search,
+    @PreAuthorize("hasAuthority('CATEGORY_PAGINATION')")
+    @GetMapping(path = "pagination/{userId}")
+    public ResponseEntity<?> pagination(@PathVariable Long userId, @RequestParam(required = false) String search,
             Pageable pageable) {
         PageDTO<CategoryPaginationDTO> categoriesPage = null;
-        categoriesPage = this.categoryService.paginationSearch(id, search, pageable);
+        categoriesPage = this.categoryService.paginationSearch(userId, search, pageable);
         return new ResponseEntity<>(categoriesPage, HttpStatus.OK);
     }
 

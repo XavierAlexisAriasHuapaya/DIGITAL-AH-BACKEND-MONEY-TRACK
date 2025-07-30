@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +32,7 @@ public class TransactionController {
 
     private final TransactionService transactionService;
 
+    @PreAuthorize("hasAuthority('TRANSACTION_CREATE')")
     @PostMapping
     public ResponseEntity<?> create(@RequestBody TransactionCreateDTO transaction) {
         Map<String, Object> response = new HashMap<>();
@@ -38,6 +40,7 @@ public class TransactionController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAuthority('TRANSACTION_PAGINATION')")
     @GetMapping(path = "pagination/{userId}")
     public ResponseEntity<?> pagination(@PathVariable Long userId, @RequestParam(required = false) String search,
             Pageable pageable) {
@@ -46,18 +49,21 @@ public class TransactionController {
         return new ResponseEntity<>(transactionPage, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('TRANSACTION_BALANCE')")
     @GetMapping("balance/{userId}")
     public ResponseEntity<?> getBalanceByUserId(@PathVariable Long userId) {
         TransactionBalanceDTO transactionBalance = this.transactionService.getBalanceByUserId(userId);
         return new ResponseEntity<>(transactionBalance, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('TRANSACTION_DASHBOARD_BAR')")
     @GetMapping("dashboard/bar/{userId}")
     public ResponseEntity<?> getTransactionBarByUserId(@PathVariable Long userId) {
         List<TransactionBarDTO>  transactionBarList = this.transactionService.getTransactionBarByUserId(userId);
         return new ResponseEntity<>(transactionBarList, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('TRANSACTION_DASHBOARD_BAR_TYPE')")
     @GetMapping("dashboard/bar/{userId}/type/{type}")
     public ResponseEntity<?> getTransactionBarIncomeExpenseByUserIdAndType(@PathVariable Long userId, @PathVariable String type) {
         List<TransactionBarIncomeExpenseDTO>  transactionBarList = this.transactionService.getTransactionBarIncomeExpenseByUserIdAndType(userId, type);

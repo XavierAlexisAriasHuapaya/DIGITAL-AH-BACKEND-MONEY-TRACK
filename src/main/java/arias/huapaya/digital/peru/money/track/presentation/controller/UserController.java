@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +35,7 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAuthority('USER_UPDATE')")
     @PatchMapping
     public ResponseEntity<?> update(@RequestBody UserUpdateDTO user) {
         Map<String, Object> response = new HashMap<>();
@@ -41,6 +43,7 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAuthority('USER_UPDATE_PASSWORD')")
     @PatchMapping(path = "password")
     public ResponseEntity<?> updatePassword(@RequestBody UserUpdatePasswordDTO user) {
         Map<String, Object> response = new HashMap<>();
@@ -48,6 +51,7 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAuthority('USER_FIND_ONE')")
     @GetMapping(path = "{id}")
     public ResponseEntity<?> findOne(@PathVariable Long id) {
         UserFindOneDTO user = this.userService.findOne(id);
