@@ -2,9 +2,11 @@ package arias.huapaya.digital.peru.money.track.service;
 
 import java.util.Optional;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import arias.huapaya.digital.peru.money.track.interfaces.UserImpl;
+import arias.huapaya.digital.peru.money.track.persistence.entity.RolEntity;
 import arias.huapaya.digital.peru.money.track.persistence.entity.UserEntity;
 import arias.huapaya.digital.peru.money.track.persistence.repository.UserRepository;
 import arias.huapaya.digital.peru.money.track.presentation.dto.user.UserCreateDTO;
@@ -19,13 +21,22 @@ public class UserService implements UserImpl {
 
     private final UserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Override
     public String create(UserCreateDTO user) {
+        RolEntity rolEntity = RolEntity.builder()
+                .id(2L)
+                .build();
         UserEntity userEntity = UserEntity
                 .builder()
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .country(user.getCountry())
                 .email(user.getEmail())
                 .username(user.getUsername())
-                .password(user.getPassword())
+                .password(passwordEncoder.encode(user.getPassword()))
+                .rol(rolEntity)
                 .build();
         userRepository.save(userEntity);
         return "Successfully created";
