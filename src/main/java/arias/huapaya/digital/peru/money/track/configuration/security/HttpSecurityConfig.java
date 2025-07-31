@@ -18,6 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 import arias.huapaya.digital.peru.money.track.configuration.security.filter.JwtAuthenticationFilter;
 import arias.huapaya.digital.peru.money.track.persistence.entity.UserEntity;
@@ -48,12 +49,13 @@ public class HttpSecurityConfig {
 
     private final JwtService jwtService;
 
-    // private final AuthenticationService authenticationService;
+    private final CorsConfigurationSource corsConfigurationSource;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         SecurityFilterChain filter = httpSecurity.csrf(csrf -> csrf.disable())
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .cors(cors -> cors.configurationSource(this.corsConfigurationSource))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(this.authenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(requestConfig -> {
