@@ -10,6 +10,7 @@ import arias.huapaya.digital.peru.money.track.persistence.entity.RolEntity;
 import arias.huapaya.digital.peru.money.track.persistence.entity.UserEntity;
 import arias.huapaya.digital.peru.money.track.persistence.repository.UserRepository;
 import arias.huapaya.digital.peru.money.track.presentation.dto.user.UserCreateDTO;
+import arias.huapaya.digital.peru.money.track.presentation.dto.user.UserCreateGoogleDTO;
 import arias.huapaya.digital.peru.money.track.presentation.dto.user.UserFindOneDTO;
 import arias.huapaya.digital.peru.money.track.presentation.dto.user.UserUpdateDTO;
 import arias.huapaya.digital.peru.money.track.presentation.dto.user.UserUpdatePasswordDTO;
@@ -92,6 +93,30 @@ public class UserService implements UserImpl {
         userEntity.setPassword(this.passwordEncoder.encode(user.getNewPassword()));
         userRepository.save(userEntity);
         return "Successfully updated password";
+    }
+
+    @Override
+    public String create(UserCreateGoogleDTO user) {
+        RolEntity rolEntity = RolEntity.builder()
+                .id(2L)
+                .build();
+        UserEntity userEntity = UserEntity
+                .builder()
+                .provider(user.getProvider())
+                .providerId(user.getProviderId())
+                .email(user.getEmail())
+                .username(user.getUsername())
+                .password(passwordEncoder.encode(user.getPassword()))
+                .rol(rolEntity)
+                .build();
+        userRepository.save(userEntity);
+        return "Successfully created";
+    }
+
+    @Override
+    public Optional<UserEntity> findByUsername(String username) {
+        Optional<UserEntity> userOpt = this.userRepository.findByUsername(username);
+        return userOpt;
     }
 
 }

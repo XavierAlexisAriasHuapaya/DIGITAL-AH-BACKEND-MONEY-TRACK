@@ -8,6 +8,17 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 186575724653-juh6l1oidgit5n63kh834rsv84sv4ls2.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+            - openid
+            - profile
+            - email
 
 server:
   servlet:
