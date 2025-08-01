@@ -1,4 +1,4 @@
-INSERT INTO countries (name, cca2, cca3, currency_symbol, currency_name, code_country) VALUES ('Perú', 'PE', 'PER', 'S/', 'Peruvian sol', 51);
+INSERT INTO countries (name, cca2, cca3, currency_symbol, currency_name, code_country) VALUES ('Peru', 'PE', 'PER', 'S/', 'Peruvian sol', 51);
 INSERT INTO countries (name, cca2, cca3, currency_symbol, currency_name, code_country) VALUES ('Chile', 'CL', 'CHL', '$', 'Chilean peso', 56);
 INSERT INTO countries (name, cca2, cca3, currency_symbol, currency_name, code_country) VALUES ('Ecuador', 'EC', 'ECU', '$', 'United States dollar', 593);
 INSERT INTO countries (name, cca2, cca3, currency_symbol, currency_name, code_country) VALUES ('Argentina', 'AR', 'ARG', '$', 'Argentine peso', 54);
@@ -10,22 +10,22 @@ INSERT INTO roles (description, enabled) VALUES ('EMPLOYEE', true);
 
 INSERT INTO users (first_name, last_name, country_id, email, username, password, rol_id, created_at, updated_at, enabled) VALUES ('Arias Huapaya', 'Xavier Alexis', 1, 'xavieralexisariashuapaya@hotmail.com', 'alexis', '$2a$10$7.kqP/Rb5aFoYnaPXt7jXOzJMrvXiLfYP1d5YSjqEIkpELpjjYl8C', 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true);
 
-INSERT INTO categories (type, description, user_id, created_at, updated_at, enabled) VALUES ('INBOUND', 'MONTO INICIAL', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true); --1
-INSERT INTO categories (type, description, user_id, created_at, updated_at, enabled) VALUES ('INBOUND', 'SUELDO', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true); --1
-INSERT INTO categories (type, description, user_id, created_at, updated_at, enabled) VALUES ('INBOUND', 'AHORROS', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true); --2
-INSERT INTO categories (type, description, user_id, created_at, updated_at, enabled) VALUES ('OUTBOUND', 'DEUDA', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true); --3
-INSERT INTO categories (type, description, user_id, created_at, updated_at, enabled) VALUES ('OUTBOUND', 'INTERNET', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true); --4
-INSERT INTO categories (type, description, user_id, created_at, updated_at, enabled) VALUES ('OUTBOUND', 'LUZ', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true); --5
-INSERT INTO categories (type, description, user_id, created_at, updated_at, enabled) VALUES ('OUTBOUND', 'ESTUDIOS', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true); --6
-INSERT INTO categories (type, description, user_id, created_at, updated_at, enabled) VALUES ('OUTBOUND', 'COMIDAS', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true); --7
-INSERT INTO categories (type, description, user_id, created_at, updated_at, enabled) VALUES ('OUTBOUND', 'GASTOS INNECESARIO', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true); --8
-INSERT INTO categories (type, description, user_id, created_at, updated_at, enabled) VALUES ('OUTBOUND', 'PASAJES', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true); --9
-INSERT INTO categories (type, description, user_id, created_at, updated_at, enabled) VALUES ('OUTBOUND', 'PRENDAS DE VESTIR', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true); --10
-INSERT INTO categories (type, description, user_id, created_at, updated_at, enabled) VALUES ('OUTBOUND', 'SERVIDOR CONTABO', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true); --11
-INSERT INTO categories (type, description, user_id, created_at, updated_at, enabled) VALUES ('OUTBOUND', 'SPOTIFY', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true); --12
-INSERT INTO categories (type, description, user_id, created_at, updated_at, enabled) VALUES ('OUTBOUND', 'PLAN CELULAR', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true); --13
-INSERT INTO categories (type, description, user_id, created_at, updated_at, enabled) VALUES ('OUTBOUND', 'COMPRA ELECTRODOMESTICO', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true); --14
-INSERT INTO categories (type, description, user_id, created_at, updated_at, enabled) VALUES ('OUTBOUND', 'TRANSFERENCIA', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true); --15
+INSERT INTO categories (type, description, user_id, created_at, updated_at, enabled) VALUES ('INBOUND', 'Initial Amount', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true); --1
+-- INSERT INTO categories (type, description, user_id, created_at, updated_at, enabled) VALUES ('INBOUND', 'SUELDO', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true); --1
+-- INSERT INTO categories (type, description, user_id, created_at, updated_at, enabled) VALUES ('INBOUND', 'AHORROS', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true); --2
+-- INSERT INTO categories (type, description, user_id, created_at, updated_at, enabled) VALUES ('OUTBOUND', 'DEUDA', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true); --3
+-- INSERT INTO categories (type, description, user_id, created_at, updated_at, enabled) VALUES ('OUTBOUND', 'INTERNET', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true); --4
+-- INSERT INTO categories (type, description, user_id, created_at, updated_at, enabled) VALUES ('OUTBOUND', 'LUZ', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true); --5
+-- INSERT INTO categories (type, description, user_id, created_at, updated_at, enabled) VALUES ('OUTBOUND', 'ESTUDIOS', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true); --6
+-- INSERT INTO categories (type, description, user_id, created_at, updated_at, enabled) VALUES ('OUTBOUND', 'COMIDAS', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true); --7
+-- INSERT INTO categories (type, description, user_id, created_at, updated_at, enabled) VALUES ('OUTBOUND', 'GASTOS INNECESARIO', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true); --8
+-- INSERT INTO categories (type, description, user_id, created_at, updated_at, enabled) VALUES ('OUTBOUND', 'PASAJES', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true); --9
+-- INSERT INTO categories (type, description, user_id, created_at, updated_at, enabled) VALUES ('OUTBOUND', 'PRENDAS DE VESTIR', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true); --10
+-- INSERT INTO categories (type, description, user_id, created_at, updated_at, enabled) VALUES ('OUTBOUND', 'SERVIDOR CONTABO', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true); --11
+-- INSERT INTO categories (type, description, user_id, created_at, updated_at, enabled) VALUES ('OUTBOUND', 'SPOTIFY', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true); --12
+-- INSERT INTO categories (type, description, user_id, created_at, updated_at, enabled) VALUES ('OUTBOUND', 'PLAN CELULAR', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true); --13
+-- INSERT INTO categories (type, description, user_id, created_at, updated_at, enabled) VALUES ('OUTBOUND', 'COMPRA ELECTRODOMESTICO', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true); --14
+INSERT INTO categories (type, description, user_id, created_at, updated_at, enabled) VALUES ('OUTBOUND', 'Transfer', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true); --15
 
 INSERT INTO bank_accounts (type_account, name, user_id, created_at, updated_at, enabled) VALUES ('BANK', 'BCP', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true);
 INSERT INTO bank_accounts (type_account, name, user_id, created_at, updated_at, enabled) VALUES ('BANK', 'INTERBANK', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, true);

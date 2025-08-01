@@ -7,7 +7,7 @@ spring:
     password: 123
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
   security:
     oauth2:
       client:
