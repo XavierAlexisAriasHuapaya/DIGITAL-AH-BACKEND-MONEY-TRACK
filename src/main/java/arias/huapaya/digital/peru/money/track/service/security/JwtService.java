@@ -15,21 +15,19 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtService {
 
-    private final int minute = 60;
-
-    private final Date createdAt = new Date(System.currentTimeMillis());
-
-    private final Date expired = new Date(createdAt.getTime() + (minute * 60 * 1000));
-
     public String generateToken(UserDetails userDetails, Map<String, Object> extraClaims) {
         String jwt = "";
+        int minute = 1;
+        Date issuedAt = new Date(System.currentTimeMillis());
+        Date expiration = new Date((minute * 60 * 1000) + issuedAt.getTime());
+
         jwt = Jwts.builder()
                 .header()
                 .type("JWT")
                 .and()
                 .subject(userDetails.getUsername())
-                .issuedAt(createdAt)
-                .expiration(expired)
+                .issuedAt(issuedAt)
+                .expiration(expiration)
                 .claims(extraClaims)
                 .signWith(this.generateKey(), Jwts.SIG.HS256)
                 .compact();
