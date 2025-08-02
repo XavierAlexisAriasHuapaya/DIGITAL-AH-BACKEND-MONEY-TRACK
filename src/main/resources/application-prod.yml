@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: app-money-track
+  datasource:
+    url: jdbc:postgresql://147.93.137.251:5432/money-track
+    username: postgres
+    password: Ft2l8Za4T0tJNCRucd8Y
+  jpa:
+    hibernate:
+      ddl-auto: none
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 186575724653-juh6l1oidgit5n63kh834rsv84sv4ls2.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+            - openid
+            - profile
+            - email
+
+server:
+  servlet:
+    context-path: /api/money-track
+  port: 8080
