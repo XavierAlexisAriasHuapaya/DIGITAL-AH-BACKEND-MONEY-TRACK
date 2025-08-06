@@ -2,12 +2,14 @@ package arias.huapaya.digital.peru.money.track.presentation.dto.user;
 
 import arias.huapaya.digital.peru.money.track.persistence.entity.CountryEntity;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class UserCreateDTO {
 
     private String firstName;

@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -22,11 +23,13 @@ import org.springframework.web.cors.CorsConfigurationSource;
 
 import arias.huapaya.digital.peru.money.track.configuration.security.filter.JwtAuthenticationFilter;
 import arias.huapaya.digital.peru.money.track.persistence.entity.UserEntity;
-import arias.huapaya.digital.peru.money.track.presentation.dto.user.UserCreateGoogleDTO;
+import arias.huapaya.digital.peru.money.track.persistence.enums.AuthProviderEnum;
+import arias.huapaya.digital.peru.money.track.presentation.dto.user.UserCreateDTO;
+import arias.huapaya.digital.peru.money.track.presentation.dto.user.UserProviderCreateDTO;
 import arias.huapaya.digital.peru.money.track.service.UserService;
 import arias.huapaya.digital.peru.money.track.service.security.JwtService;
 import arias.huapaya.digital.peru.money.track.util.exception.ObjectNotFoundException;
-import jakarta.servlet.http.Cookie;
+// import jakarta.servlet.http.Cookie;
 import lombok.AllArgsConstructor;
 
 @Configuration
@@ -45,11 +48,13 @@ public class HttpSecurityConfig {
 
     private final AuthorizationManager<RequestAuthorizationContext> authorizationManager;
 
+    private final CorsConfigurationSource corsConfigurationSource;
+
     private final UserService userService;
 
     private final JwtService jwtService;
 
-    private final CorsConfigurationSource corsConfigurationSource;
+    private final Environment environment;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -65,39 +70,34 @@ public class HttpSecurityConfig {
                     oauth.successHandler((request, response, authentication) -> {
                         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
                         String email = oAuth2User.getAttribute("email");
-                        String name = oAuth2User.getAttribute("name");
-                        String googleId = oAuth2User.getAttribute("sub");
 
-                        Optional<UserEntity> userOpt = this.userService.findByUsername(email);
+                        Optional<UserEntity> userOpt = this.userService.findByEmail(email);
+                        UserEntity user = null;
 
                         if (!userOpt.isPresent()) {
-                            UserCreateGoogleDTO userCreateDTO = UserCreateGoogleDTO.builder()
-                                    .provider("Google")
-                                    .providerId(googleId)
-                                    .email(email)
-                                    .username(email)
-                                    .password(name)
-                                    .build();
-                            this.userService.create(userCreateDTO);
+                            this.createGoogleProvider(oAuth2User);
+                        } else {
+                            user = userOpt.get();
                         }
 
-                        UserEntity userEntity = this.userService.findByUsername(email)
-                                .orElseThrow(
-                                        () -> new ObjectNotFoundException("User not found: " + email));
+                        if (user == null) {
+                            user = this.userService.findByUsername(email)
+                                    .orElseThrow(() -> new ObjectNotFoundException("User not found: " + email));
+                        }
 
                         Map<String, Object> claims = new HashMap<>();
-                        claims.put("authorities", userEntity.getAuthorities());
+                        claims.put("authorities", user.getAuthorities());
 
-                        String jwt = this.jwtService.generateToken(userEntity, claims);
+                        String jwt = this.jwtService.generateToken(user, claims);
 
-                        Cookie jwtCookie = new Cookie("token", jwt);
-                        jwtCookie.setHttpOnly(true);
-                        jwtCookie.setSecure(true);
-                        jwtCookie.setPath("/");
-                        jwtCookie.setMaxAge(3600);
+                        String profile = this.environment.getProperty("spring.profiles.active");
 
-                        response.addCookie(jwtCookie);
-                        
+
+                        String urlProfile = profile.equals("dev") ? "http://localhost:4200/auth/login"
+                                : "https://money-track.techbackend.work/auth/login";
+                        String url = (urlProfile + "?token=" + jwt);
+                        response.sendRedirect(url);
+
                     });
                 })
                 .exceptionHandling(exceptionConfig -> {
@@ -107,6 +107,30 @@ public class HttpSecurityConfig {
                 .build();
 
         return filter;
+    }
+
+    private void createGoogleProvider(OAuth2User oAuth2User) {
+        String email = oAuth2User.getAttribute("email");
+        String name = oAuth2User.getAttribute("name");
+        String providerUserId = oAuth2User.getAttribute("sub");
+
+        UserCreateDTO user = UserCreateDTO.builder()
+                .firstName(name)
+                .lastName("")
+                .country(null)
+                .email(email)
+                .username(email)
+                .password(null)
+                .build();
+
+        UserProviderCreateDTO userProvider = UserProviderCreateDTO.builder()
+                .user(user)
+                .authProvider(AuthProviderEnum.GOOGLE)
+                .providerUserId(providerUserId)
+                .accessToken("")
+                .build();
+
+        this.userService.createUserAndProvider(userProvider);
     }
 
 }

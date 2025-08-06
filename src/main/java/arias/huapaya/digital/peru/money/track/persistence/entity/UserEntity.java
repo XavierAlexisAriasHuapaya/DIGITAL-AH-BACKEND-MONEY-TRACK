@@ -55,10 +55,6 @@ public class UserEntity implements UserDetails {
     @ManyToOne
     private RolEntity rol;
 
-    private String provider;
-
-    private String providerId;
-
     @Column(updatable = false)
     private LocalDateTime createdAt;
 

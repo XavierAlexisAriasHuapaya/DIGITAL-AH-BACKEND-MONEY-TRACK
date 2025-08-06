@@ -8,12 +8,16 @@ import org.springframework.stereotype.Service;
 import arias.huapaya.digital.peru.money.track.interfaces.UserImpl;
 import arias.huapaya.digital.peru.money.track.persistence.entity.RolEntity;
 import arias.huapaya.digital.peru.money.track.persistence.entity.UserEntity;
+import arias.huapaya.digital.peru.money.track.persistence.entity.UserProviderEntity;
+import arias.huapaya.digital.peru.money.track.persistence.repository.UserProviderRepository;
 import arias.huapaya.digital.peru.money.track.persistence.repository.UserRepository;
 import arias.huapaya.digital.peru.money.track.presentation.dto.user.UserCreateDTO;
 import arias.huapaya.digital.peru.money.track.presentation.dto.user.UserCreateGoogleDTO;
 import arias.huapaya.digital.peru.money.track.presentation.dto.user.UserFindOneDTO;
+import arias.huapaya.digital.peru.money.track.presentation.dto.user.UserProviderCreateDTO;
 import arias.huapaya.digital.peru.money.track.presentation.dto.user.UserUpdateDTO;
 import arias.huapaya.digital.peru.money.track.presentation.dto.user.UserUpdatePasswordDTO;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -23,6 +27,8 @@ public class UserService implements UserImpl {
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
+
+    private final UserProviderRepository userProviderRepository;
 
     @Override
     public String create(UserCreateDTO user) {
@@ -102,8 +108,6 @@ public class UserService implements UserImpl {
                 .build();
         UserEntity userEntity = UserEntity
                 .builder()
-                .provider(user.getProvider())
-                .providerId(user.getProviderId())
                 .email(user.getEmail())
                 .username(user.getUsername())
                 .password(passwordEncoder.encode(user.getPassword()))
@@ -117,6 +121,39 @@ public class UserService implements UserImpl {
     public Optional<UserEntity> findByUsername(String username) {
         Optional<UserEntity> userOpt = this.userRepository.findByUsername(username);
         return userOpt;
+    }
+
+    @Override
+    public Optional<UserEntity> findByEmail(String email) {
+        Optional<UserEntity> userOpt = this.userRepository.findByEmail(email);
+        return userOpt;
+    }
+
+    @Transactional
+    @Override
+    public String createUserAndProvider(UserProviderCreateDTO userProvider) {
+        RolEntity rolEntity = RolEntity.builder()
+                .id(2L)
+                .build();
+        UserEntity userEntity = UserEntity
+                .builder()
+                .firstName(userProvider.getUser().getFirstName())
+                .lastName(userProvider.getUser().getLastName())
+                .email(userProvider.getUser().getEmail())
+                .username(userProvider.getUser().getUsername())
+                .password(userProvider.getUser().getPassword())
+                .rol(rolEntity)
+                .build();
+        this.userRepository.save(userEntity);
+
+        UserProviderEntity userProviderEntity = UserProviderEntity.builder()
+                .user(userEntity)
+                .authProvider(userProvider.getAuthProvider())
+                .providerUserId(userProvider.getProviderUserId())
+                .accessToken(userProvider.getAccessToken())
+                .build();
+        this.userProviderRepository.save(userProviderEntity);
+        return "Successfully created";
     }
 
 }
