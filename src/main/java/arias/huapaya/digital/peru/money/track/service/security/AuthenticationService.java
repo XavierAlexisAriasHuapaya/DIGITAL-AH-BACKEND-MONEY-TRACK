@@ -25,9 +25,10 @@ public class AuthenticationService {
 
     private final JwtService jwtService;
 
-    private Map<String, Object> generateExtraClaims(UserEntity userEntity) {
+    public Map<String, Object> generateExtraClaims(UserEntity userEntity) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("authorities", userEntity.getAuthorities());
+        claims.put("userId", userEntity.getId());
         return claims;
     }
 

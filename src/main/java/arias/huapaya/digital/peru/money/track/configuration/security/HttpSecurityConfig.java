@@ -29,7 +29,6 @@ import arias.huapaya.digital.peru.money.track.presentation.dto.user.UserProvider
 import arias.huapaya.digital.peru.money.track.service.UserService;
 import arias.huapaya.digital.peru.money.track.service.security.JwtService;
 import arias.huapaya.digital.peru.money.track.util.exception.ObjectNotFoundException;
-// import jakarta.servlet.http.Cookie;
 import lombok.AllArgsConstructor;
 
 @Configuration
@@ -87,11 +86,11 @@ public class HttpSecurityConfig {
 
                         Map<String, Object> claims = new HashMap<>();
                         claims.put("authorities", user.getAuthorities());
+                        claims.put("userId", user.getId());
 
                         String jwt = this.jwtService.generateToken(user, claims);
 
                         String profile = this.environment.getProperty("spring.profiles.active");
-
 
                         String urlProfile = profile.equals("dev") ? "http://localhost:4200/auth/login"
                                 : "https://money-track.techbackend.work/auth/login";
