@@ -55,6 +55,7 @@ INSERT INTO modules (name, base_path) VALUES ('BANK-ACCOUNT', '/bank-account');
 INSERT INTO modules (name, base_path) VALUES ('COUNTRY', '/country');
 INSERT INTO modules (name, base_path) VALUES ('TRANSACTION', '/transaction');
 INSERT INTO modules (name, base_path) VALUES ('USER', '/user');
+INSERT INTO modules (name, base_path) VALUES ('USER-SETTING', '/user-setting');
 
 INSERT INTO operations (name, path, http_method, permit_all, module_id) VALUES ('AUTHENTICATE', '/authenticate', 'POST', true, 1);
 INSERT INTO operations (name, path, http_method, permit_all, module_id) VALUES ('VALIDATE-TOKEN', '/validate', 'POST', true, 1);
@@ -88,6 +89,11 @@ INSERT INTO operations (name, path, http_method, permit_all, module_id) VALUES (
 INSERT INTO operations (name, path, http_method, permit_all, module_id) VALUES ('USER_UPDATE_PASSWORD', '/password', 'PATCH', false, 6);
 INSERT INTO operations (name, path, http_method, permit_all, module_id) VALUES ('USER_FIND_ONE', '/[0-9]*', 'GET', false, 6);
 
+
+INSERT INTO operations (name, path, http_method, permit_all, module_id) VALUES ('USER_SETTING_CREATE', '', 'POST', false, 7);
+INSERT INTO operations (name, path, http_method, permit_all, module_id) VALUES ('USER_SETTING_UPDATE', '', 'PATCH', false, 7);
+INSERT INTO operations (name, path, http_method, permit_all, module_id) VALUES ('USER_SETTING_FIND_ALL_BY_USER', '/user/[0-9]*', 'GET', false, 7);
+
 INSERT INTO permissions (rol_id, operation_id) VALUES (1, 3);
 INSERT INTO permissions (rol_id, operation_id) VALUES (1, 4);
 INSERT INTO permissions (rol_id, operation_id) VALUES (1, 5);
@@ -109,6 +115,10 @@ INSERT INTO permissions (rol_id, operation_id) VALUES (1, 19);
 INSERT INTO permissions (rol_id, operation_id) VALUES (1, 21);
 INSERT INTO permissions (rol_id, operation_id) VALUES (1, 22);
 INSERT INTO permissions (rol_id, operation_id) VALUES (1, 23);
+
+INSERT INTO permissions (rol_id, operation_id) VALUES (1, 24);
+INSERT INTO permissions (rol_id, operation_id) VALUES (1, 25);
+INSERT INTO permissions (rol_id, operation_id) VALUES (1, 26);
 
 
 
@@ -133,6 +143,10 @@ INSERT INTO permissions (rol_id, operation_id) VALUES (2, 19);
 INSERT INTO permissions (rol_id, operation_id) VALUES (2, 21);
 INSERT INTO permissions (rol_id, operation_id) VALUES (2, 22);
 INSERT INTO permissions (rol_id, operation_id) VALUES (2, 23);
+
+INSERT INTO permissions (rol_id, operation_id) VALUES (2, 24);
+INSERT INTO permissions (rol_id, operation_id) VALUES (2, 25);
+INSERT INTO permissions (rol_id, operation_id) VALUES (2, 26);
 
 -- INSERT INTO users (username, password, rol_id, enabled) VALUES ('administrator', '$2a$10$7.kqP/Rb5aFoYnaPXt7jXOzJMrvXiLfYP1d5YSjqEIkpELpjjYl8C', 1, true);
 -- INSERT INTO users (username, password, rol_id, enabled) VALUES ('employee', '$2a$10$7.kqP/Rb5aFoYnaPXt7jXOzJMrvXiLfYP1d5YSjqEIkpELpjjYl8C', 2, true);
