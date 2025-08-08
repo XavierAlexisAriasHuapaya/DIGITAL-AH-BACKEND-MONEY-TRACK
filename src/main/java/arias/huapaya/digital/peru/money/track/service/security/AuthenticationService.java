@@ -9,7 +9,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import arias.huapaya.digital.peru.money.track.persistence.entity.UserEntity;
+import arias.huapaya.digital.peru.money.track.persistence.entity.UserSettingEntity;
 import arias.huapaya.digital.peru.money.track.persistence.repository.UserRepository;
+import arias.huapaya.digital.peru.money.track.persistence.repository.UserSettingRepository;
 import arias.huapaya.digital.peru.money.track.presentation.dto.security.AuthenticationRequest;
 import arias.huapaya.digital.peru.money.track.presentation.dto.security.AuthenticationResponse;
 import arias.huapaya.digital.peru.money.track.util.exception.ObjectNotFoundException;
@@ -25,10 +27,16 @@ public class AuthenticationService {
 
     private final JwtService jwtService;
 
+    private final UserSettingRepository userSettingRepository;
+
     public Map<String, Object> generateExtraClaims(UserEntity userEntity) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("authorities", userEntity.getAuthorities());
         claims.put("userId", userEntity.getId());
+        UserSettingEntity userSettingOpt = this.userSettingRepository.findByUserId(userEntity.getId());
+        if (userSettingOpt != null) {
+            claims.put("language", userSettingOpt.getLanguage());
+        }
         return claims;
     }
 
