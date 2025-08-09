@@ -18,17 +18,17 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
                         Pageable pageable);
 
         @Query(value = "SELECT " +
-                        "COALESCE(SUM(CASE WHEN c.type = 'INBOUND' THEN t.amount END), 0) AS inbound, " +
-                        "COALESCE(SUM(CASE WHEN c.type = 'OUTBOUND' THEN t.amount END), 0) AS outbound, " +
-                        "(COALESCE(SUM(CASE WHEN c.type = 'INBOUND' THEN t.amount END), 0) " +
-                        "- COALESCE(SUM(CASE WHEN c.type = 'OUTBOUND' THEN t.amount END), 0)) AS balance, " +
-                        "COALESCE(SUM(CASE when c.type = 'INBOUND' AND t.date >= date_trunc('month', current_date) THEN t.amount END), 0) as inbound_to_month, "
+                        "COALESCE(SUM(CASE WHEN c.type = 'INCOME' THEN t.amount END), 0) AS income, " +
+                        "COALESCE(SUM(CASE WHEN c.type = 'EXPENSE' THEN t.amount END), 0) AS expense, " +
+                        "(COALESCE(SUM(CASE WHEN c.type = 'INCOME' THEN t.amount END), 0) " +
+                        "- COALESCE(SUM(CASE WHEN c.type = 'EXPENSE' THEN t.amount END), 0)) AS balance, " +
+                        "COALESCE(SUM(CASE when c.type = 'INCOME' AND t.date >= date_trunc('month', current_date) THEN t.amount END), 0) as income_to_month, "
                         +
-                        "COALESCE(SUM(CASE when c.type = 'OUTBOUND' AND t.date >= date_trunc('month', current_date) THEN t.amount END), 0) as outbound_to_month, "
+                        "COALESCE(SUM(CASE when c.type = 'EXPENSE' AND t.date >= date_trunc('month', current_date) THEN t.amount END), 0) as expense_to_month, "
                         +
-                        "(COALESCE(SUM(CASE when c.type = 'INBOUND' AND t.date >= date_trunc('month', current_date) THEN t.amount END), 0) "
+                        "(COALESCE(SUM(CASE when c.type = 'INCOME' AND t.date >= date_trunc('month', current_date) THEN t.amount END), 0) "
                         +
-                        "- COALESCE(SUM(CASE when c.type = 'OUTBOUND' AND t.date >= date_trunc('month', current_date) THEN t.amount END), 0)) balance_to_month "
+                        "- COALESCE(SUM(CASE when c.type = 'EXPENSE' AND t.date >= date_trunc('month', current_date) THEN t.amount END), 0)) balance_to_month "
                         +
                         "FROM transactions t " +
                         "INNER JOIN categories c ON c.id = t.category_id  " +
@@ -39,8 +39,8 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
         @Query(value = "select " +
                         "to_char(t.date, 'MM') as month_num, " +
                         "to_char(t.date, 'Month') as month, " +
-                        "COALESCE(SUM(CASE WHEN c.type = 'INBOUND' THEN t.amount END), 0) AS income, " +
-                        "COALESCE(SUM(CASE WHEN c.type = 'OUTBOUND' THEN t.amount END), 0) AS expense, " +
+                        "COALESCE(SUM(CASE WHEN c.type = 'INCOME' THEN t.amount END), 0) AS income, " +
+                        "COALESCE(SUM(CASE WHEN c.type = 'EXPENSE' THEN t.amount END), 0) AS expense, " +
                         "'rgba(34, 197, 94, 0.70)' as backgroundColorIncome, " +
                         "'rgba(43, 255, 0, 0.2)' as borderColorIncome, " +
                         "'rgba(255, 0, 0, 0.70)' as backgroundColorExpense, " +
