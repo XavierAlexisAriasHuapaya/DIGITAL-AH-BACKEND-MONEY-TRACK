@@ -35,7 +35,9 @@ public class AuthenticationService {
         claims.put("userId", userEntity.getId());
         UserSettingEntity userSettingOpt = this.userSettingRepository.findByUserId(userEntity.getId());
         if (userSettingOpt != null) {
+            claims.put("userSettingId", userSettingOpt.getId());
             claims.put("language", userSettingOpt.getLanguage());
+            claims.put("currency", userSettingOpt.getCurrency());
         }
         return claims;
     }
