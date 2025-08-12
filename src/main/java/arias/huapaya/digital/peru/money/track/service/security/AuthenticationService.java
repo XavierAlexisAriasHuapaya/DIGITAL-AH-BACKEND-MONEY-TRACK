@@ -38,6 +38,7 @@ public class AuthenticationService {
             claims.put("userSettingId", userSettingOpt.getId());
             claims.put("language", userSettingOpt.getLanguage());
             claims.put("currency", userSettingOpt.getCurrency());
+            claims.put("theme", userSettingOpt.getTheme());
         }
         return claims;
     }
