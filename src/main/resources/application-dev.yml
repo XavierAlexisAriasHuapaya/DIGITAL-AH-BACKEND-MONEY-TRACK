@@ -19,6 +19,12 @@ spring:
             - openid
             - profile
             - email
+          github:
+            client-id: Ov23lisWdEEGHFQPtKaC
+            client-secret: 32f61ab039c558cf6345b5db0d7a7b84689065b6
+            scope:
+            - read:user
+            - user:email
 server:
   servlet:
     context-path: /api/money-track

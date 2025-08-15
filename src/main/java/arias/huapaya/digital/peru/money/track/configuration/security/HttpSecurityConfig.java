@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
@@ -68,13 +69,19 @@ public class HttpSecurityConfig {
                 .oauth2Login(oauth -> {
                     oauth.successHandler((request, response, authentication) -> {
                         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-                        String email = oAuth2User.getAttribute("email");
+
+                        String provider = ((OAuth2AuthenticationToken) authentication)
+                                .getAuthorizedClientRegistrationId();
+                        AuthProviderEnum authProvider = AuthProviderEnum.valueOf(provider.toUpperCase());
+                        String email = (authProvider == AuthProviderEnum.GOOGLE)
+                                ? oAuth2User.getAttribute("email")
+                                : oAuth2User.getAttribute("login");
 
                         Optional<UserEntity> userOpt = this.userService.findByEmail(email);
                         UserEntity user = null;
 
                         if (!userOpt.isPresent()) {
-                            this.createGoogleProvider(oAuth2User);
+                            this.createProvider(oAuth2User, authProvider);
                         } else {
                             user = userOpt.get();
                         }
@@ -108,10 +115,20 @@ public class HttpSecurityConfig {
         return filter;
     }
 
-    private void createGoogleProvider(OAuth2User oAuth2User) {
-        String email = oAuth2User.getAttribute("email");
-        String name = oAuth2User.getAttribute("name");
-        String providerUserId = oAuth2User.getAttribute("sub");
+    private void createProvider(OAuth2User oAuth2User, AuthProviderEnum provider) {
+        String email = "";
+        String name = "";
+        String providerUserId = "";
+
+        if (provider == AuthProviderEnum.GOOGLE) {
+            email = oAuth2User.getAttribute("email");
+            name = oAuth2User.getAttribute("name");
+            providerUserId = oAuth2User.getAttribute("sub");
+        } else if (provider == AuthProviderEnum.GITHUB) {
+            email = oAuth2User.getAttribute("login");
+            name = oAuth2User.getAttribute("name") == null ? email : oAuth2User.getAttribute("name");
+            providerUserId = oAuth2User.getAttribute("id").toString();
+        }
 
         UserCreateDTO user = UserCreateDTO.builder()
                 .firstName(name)
@@ -124,7 +141,7 @@ public class HttpSecurityConfig {
 
         UserProviderCreateDTO userProvider = UserProviderCreateDTO.builder()
                 .user(user)
-                .authProvider(AuthProviderEnum.GOOGLE)
+                .authProvider(provider)
                 .providerUserId(providerUserId)
                 .accessToken("")
                 .build();
