@@ -11,6 +11,8 @@ public class TransactionBarDTO {
 
     private String month;
 
+    private String year;
+
     private Double income;
 
     private Double expense;

@@ -22,8 +22,8 @@ public interface TransactionImpl {
 
     TransactionBalanceDTO getBalanceByUserId(Long userId);
 
-    List<TransactionBarDTO> getTransactionBarByUserId(Long userId);
+    List<TransactionBarDTO> getTransactionBarByUserId(Long userId, String year);
 
-    List<TransactionBarIncomeExpenseDTO> getTransactionBarIncomeExpenseByUserIdAndType(Long userId, String type);
+    List<TransactionBarIncomeExpenseDTO> getTransactionBarIncomeExpenseByUserIdAndType(Long userId, String type, String year);
 
 }

@@ -39,19 +39,21 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
         @Query(value = "select " +
                         "to_char(t.date, 'MM') as month_num, " +
                         "to_char(t.date, 'Month') as month, " +
+                        "to_char(t.date, 'yyyy') as year, " +
                         "COALESCE(SUM(CASE WHEN c.type = 'INCOME' THEN t.amount END), 0) AS income, " +
                         "COALESCE(SUM(CASE WHEN c.type = 'EXPENSE' THEN t.amount END), 0) AS expense, " +
-                        "'rgba(34, 197, 94, 0.70)' as backgroundColorIncome, " +
-                        "'rgba(43, 255, 0, 0.2)' as borderColorIncome, " +
-                        "'rgba(255, 0, 0, 0.70)' as backgroundColorExpense, " +
-                        "'rgba(255, 0, 0, 0.2)' as borderColorExpense " +
+                        "'rgba(34, 197, 94, 0.70)' as backgroundColorIncome,  " +
+                        "'rgba(43, 255, 0, 0.2)' as borderColorIncome,  " +
+                        "'rgba(255, 0, 0, 0.70)' as backgroundColorExpense,  " +
+                        "'rgba(255, 0, 0, 0.2)' as borderColorExpense  " +
                         "from transactions t " +
                         "INNER JOIN categories c ON c.id = t.category_id  " +
                         "WHERE t.user_id = ?1 " +
                         "AND t.enabled = true " +
-                        "group by month_num, month " +
+                        "and to_char(t.date, 'yyyy') = ?2 " +
+                        "group by month_num, month, year " +
                         "order by month_num;", nativeQuery = true)
-        List<TransactionBarDTO> getTransactionBarByUserId(Long userId);
+        List<TransactionBarDTO> getTransactionBarByUserId(Long userId, String year);
 
         @Query(value = "select " +
                         "c.description, " +
@@ -61,8 +63,10 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
                         "inner join categories c on c.id  = t.category_id " +
                         "where c.user_id = ?1 " +
                         "and c.type = ?2 " +
+                        "and to_char(t.date, 'yyyy') = ?3 " +
                         "group by c.description, c.type " +
                         "order by sum(t.amount) desc  " +
                         "limit 5", nativeQuery = true)
-        List<TransactionBarIncomeExpenseDTO> getTransactionBarIncomeExpenseByUserIdAndType(Long userId, String type);
+        List<TransactionBarIncomeExpenseDTO> getTransactionBarIncomeExpenseByUserIdAndType(Long userId, String type,
+                        String year);
 }

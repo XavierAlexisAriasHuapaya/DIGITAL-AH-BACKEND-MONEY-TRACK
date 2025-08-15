@@ -82,13 +82,13 @@ public class TransactionService implements TransactionImpl {
 
     @Transactional(readOnly = true)
     @Override
-    public List<TransactionBarDTO>  getTransactionBarByUserId(Long userId) {
-        return this.respository.getTransactionBarByUserId(userId);
+    public List<TransactionBarDTO>  getTransactionBarByUserId(Long userId, String year) {
+        return this.respository.getTransactionBarByUserId(userId, year);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<TransactionBarIncomeExpenseDTO> getTransactionBarIncomeExpenseByUserIdAndType(Long userId, String type) {
-        return this.respository.getTransactionBarIncomeExpenseByUserIdAndType(userId, type);
+    public List<TransactionBarIncomeExpenseDTO> getTransactionBarIncomeExpenseByUserIdAndType(Long userId, String type, String year) {
+        return this.respository.getTransactionBarIncomeExpenseByUserIdAndType(userId, type, year);
     }
 }

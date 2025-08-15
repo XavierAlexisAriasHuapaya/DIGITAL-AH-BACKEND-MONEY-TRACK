@@ -57,16 +57,18 @@ public class TransactionController {
     }
 
     @PreAuthorize("hasAuthority('TRANSACTION_DASHBOARD_BAR')")
-    @GetMapping("dashboard/bar/{userId}")
-    public ResponseEntity<?> getTransactionBarByUserId(@PathVariable Long userId) {
-        List<TransactionBarDTO>  transactionBarList = this.transactionService.getTransactionBarByUserId(userId);
+    @GetMapping("dashboard/bar/{userId}/year/{year}")
+    public ResponseEntity<?> getTransactionBarByUserId(@PathVariable Long userId, @PathVariable String year) {
+        List<TransactionBarDTO> transactionBarList = this.transactionService.getTransactionBarByUserId(userId, year);
         return new ResponseEntity<>(transactionBarList, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('TRANSACTION_DASHBOARD_BAR_TYPE')")
-    @GetMapping("dashboard/bar/{userId}/type/{type}")
-    public ResponseEntity<?> getTransactionBarIncomeExpenseByUserIdAndType(@PathVariable Long userId, @PathVariable String type) {
-        List<TransactionBarIncomeExpenseDTO>  transactionBarList = this.transactionService.getTransactionBarIncomeExpenseByUserIdAndType(userId, type);
+    @GetMapping("dashboard/bar/{userId}/type/{type}/year/{year}")
+    public ResponseEntity<?> getTransactionBarIncomeExpenseByUserIdAndType(@PathVariable Long userId,
+            @PathVariable String type, @PathVariable String year) {
+        List<TransactionBarIncomeExpenseDTO> transactionBarList = this.transactionService
+                .getTransactionBarIncomeExpenseByUserIdAndType(userId, type, year);
         return new ResponseEntity<>(transactionBarList, HttpStatus.OK);
     }
 
