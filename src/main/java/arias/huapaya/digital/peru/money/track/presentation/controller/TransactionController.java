@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +21,9 @@ import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.Trans
 import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.TransactionBarDTO;
 import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.TransactionBarIncomeExpenseDTO;
 import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.TransactionCreateDTO;
+import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.TransactionFindOneDTO;
 import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.TransactionPaginationDTO;
+import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.TransactionUpdateDTO;
 import arias.huapaya.digital.peru.money.track.service.TransactionService;
 import arias.huapaya.digital.peru.money.track.util.model.PageDTO;
 import lombok.AllArgsConstructor;
@@ -37,6 +40,14 @@ public class TransactionController {
     public ResponseEntity<?> create(@RequestBody TransactionCreateDTO transaction) {
         Map<String, Object> response = new HashMap<>();
         response.put("response", this.transactionService.create(transaction));
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @PreAuthorize("hasAuthority('TRANSACTION_UPDATE')")
+    @PatchMapping
+    public ResponseEntity<?> update(@RequestBody TransactionUpdateDTO transaction) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("response", this.transactionService.update(transaction));
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -70,6 +81,13 @@ public class TransactionController {
         List<TransactionBarIncomeExpenseDTO> transactionBarList = this.transactionService
                 .getTransactionBarIncomeExpenseByUserIdAndType(userId, type, year);
         return new ResponseEntity<>(transactionBarList, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAuthority('TRANSACTION_FIND_ONE')")
+    @GetMapping(path = "{id}")
+    public ResponseEntity<?> findOne(@PathVariable Long id) {
+        TransactionFindOneDTO findOneDto = this.transactionService.findOne(id);
+        return new ResponseEntity<>(findOneDto, HttpStatus.OK);
     }
 
 }

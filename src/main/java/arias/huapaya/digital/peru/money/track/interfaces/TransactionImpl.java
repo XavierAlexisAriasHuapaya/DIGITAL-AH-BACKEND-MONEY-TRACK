@@ -9,12 +9,16 @@ import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.Trans
 import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.TransactionBarIncomeExpenseDTO;
 import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.TransactionCreateDTO;
 import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.TransactionFindAllDTO;
+import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.TransactionFindOneDTO;
 import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.TransactionPaginationDTO;
+import arias.huapaya.digital.peru.money.track.presentation.dto.transaction.TransactionUpdateDTO;
 import arias.huapaya.digital.peru.money.track.util.model.PageDTO;
 
 public interface TransactionImpl {
 
     String create(TransactionCreateDTO transaction);
+
+    String update(TransactionUpdateDTO transaction);
 
     List<TransactionFindAllDTO> findAll();
 
@@ -24,6 +28,9 @@ public interface TransactionImpl {
 
     List<TransactionBarDTO> getTransactionBarByUserId(Long userId, String year);
 
-    List<TransactionBarIncomeExpenseDTO> getTransactionBarIncomeExpenseByUserIdAndType(Long userId, String type, String year);
+    List<TransactionBarIncomeExpenseDTO> getTransactionBarIncomeExpenseByUserIdAndType(Long userId, String type,
+            String year);
+
+    TransactionFindOneDTO findOne(Long id);
 
 }
